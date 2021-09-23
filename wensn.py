@@ -1,6 +1,7 @@
 import usb.core
 
 # Inspired by ebswift, https://www.ebswift.com/reverse-engineering-spl-usb.html
+# Updated for MQTT connection by vsigno
 
 # The Wensn WS1381 answers these bRequests
 # 1 seems to be constant - array of 2 bytes returned
@@ -79,6 +80,8 @@ if __name__ == "__main__":
     import logroll
     import datetime
     import time
+    import json
+    from SPLmqtt import *
 
     # connect to WS1381 over USB
     dev = connect()
@@ -87,6 +90,7 @@ if __name__ == "__main__":
     setMode(dev)
 
     log = logroll.LogRoll(logdir="logs")
+    spl = SPLmqtt()
     while True:
         now = datetime.datetime.now()
         # roll over to a new log whenever the filename changes - in this case, every hour.
@@ -100,6 +104,12 @@ if __name__ == "__main__":
               % (dB, weight, speed, now.strftime('%Y,%m,%d,%H,%M,%S')))
 
         log.fp.flush()
+
+        # Publish MQTT
+        jsonString = json.dumps({"dB":dB,"weight":weight,"speed":speed,"time":now.strftime('%Y,%m,%d,%H,%M,%S')})
+
+        spl.client.publish("TOPIC", jsonString)
+
         time.sleep(1)
 
 

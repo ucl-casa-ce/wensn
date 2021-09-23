@@ -1,9 +1,8 @@
-
 # Reading the Wensn WS1361 Sound Pressure Level (SPL) Meter over USB (on the Raspberry Pi)
 
 The Wensn WS1361 is a cheap but decent quality Sound Level Meter from China. You can get it on Aliexpress for $25-30, for example here: https://www.aliexpress.com/item/32328084637.html Make sure you get the one with the USB cable or you won't be able to talk to it. (Usefully, the device can be powered over USB without batteries installed.)
 
-![WS1361](https://github.com/mepster/wensn/blob/master/WS1361.png)
+![WS1361](./WS1361.png)
 
 This Python (3) library lets you set the modes of the WS1361, and read the current sound level.
 
@@ -11,16 +10,36 @@ The WS1361 can read with 'A' or 'C' sound weighting, and 'fast' or 'slow' averag
 
 You can also set the "range". This does change the range shown on the device display, but doesn't change the sound levels returned over USB. Similarly, you can set the "maxMode" to "max" or "instant", which also changes what is shown on the device display (e.g., "max" mode shows the running peak value), but doesn't change the sound levels returned over USB.
 
-## Installation:
+### Note: you may need to use a ground loop USB isolator
+
+## Step by Step Installation (Rpi Headless):
+
+1) Once Raspberry Pi OS LITE (32-bit) is installed
+    -  `sudo raspi-config`
+        - change *Hostname* and *Password*
+        - enable SSH
+        - add WiFi connection(s)
+        - reboot, check the connection and find IP address for SSH `ifconfig wlan0`
+    - `sudo apt-get update`
+    - `sudo apt-get upgrade`
+
+2) Install the packages
+    - `sudo apt-get install python3-pip`
+        - `sudo pip3 install pyusb`
+        - `sudo pip3 install paho-mqtt`
+    - `sudo apt install git`
+
+3) Clone this repository and setup the variables
+    - git clone https://github.com/ucl-casa-ce/wensn.git /opt/noisemeter
+    - using `sudo nano /opt/noisemeter/SPLmqtt.py`
+        - change value for *USERNAME*, *PASSWORD*, *MQTT_BROKER* and its port
+    - using `sudo nano /opt/noisemeter/wensn.py`
+        - change the *TOPIC* at the end of the file `spl.client.publish("TOPIC", jsonString)` 
+
+Finally, run:
 
 ```
-pip3 install pyusb
-```
-
-and run:
-
-```
-python3 wensn.py
+sudo python3 wensn.py
 ```
 
 ## Setting permissions for the usb device:
@@ -65,15 +84,6 @@ udevadm test $(udevadm info -q path -n /dev/bus/usb/001/023)
 ```
 
 (That's how I finally figured out that my file wasn't being read, because it didn't end in ".rules".)
-
-## Alternative to setting device permissions: run as root
-If you don't want to bother setting the device permissions, you can run as root:
-```
-sudo pip3 install pyusb
-```
-```
-sudo python3 wensn.py
-```
 
 ## Install the service so it runs after reboot:
 
