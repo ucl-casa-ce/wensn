@@ -10,7 +10,9 @@ The WS1361 can read with 'A' or 'C' sound weighting, and 'fast' or 'slow' averag
 
 You can also set the "range". This does change the range shown on the device display, but doesn't change the sound levels returned over USB. Similarly, you can set the "maxMode" to "max" or "instant", which also changes what is shown on the device display (e.g., "max" mode shows the running peak value), but doesn't change the sound levels returned over USB.
 
-### Note: you may need to use a ground loop USB isolator
+### NOTE: depending on your setup you may need to use a ground loop USB isolator
+
+We used the [Adafruit USB Isolator - 100mA Isolated Low/Full Speed USB](https://www.adafruit.com/product/2107). ATTENTION set the speed of the isolator to **LOW** otherwise the WS1361 will not be detected
 
 ## Step by Step Installation (Rpi Headless):
 
