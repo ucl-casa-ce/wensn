@@ -33,7 +33,7 @@ We used the [Adafruit USB Isolator - 100mA Isolated Low/Full Speed USB](https://
     - `sudo apt install git`
 
 3) Clone this repository and setup the variables
-    - git clone https://github.com/ucl-casa-ce/wensn.git /opt/noisemeter
+    - `git clone https://github.com/ucl-casa-ce/wensn.git /opt/noisemeter`
     - using `sudo nano /opt/noisemeter/SPLmqtt.py`
         - change value for *USERNAME*, *PASSWORD*, *MQTT_BROKER* and its port
     - using `sudo nano /opt/noisemeter/wensn.py`
