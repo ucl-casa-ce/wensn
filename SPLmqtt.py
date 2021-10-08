@@ -21,3 +21,4 @@ class SPLmqtt():
 
     # Connect to MQTT Broker
     client.connect("MQTT_BROKER", 1884)
+    client.loop_start()
